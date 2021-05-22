@@ -20,11 +20,6 @@ class CommentCrudController extends AbstractCrudController
 		return Comment::class;
 	}
 
-	public function __toString(): string
-	{
-		return (string)$this->getEmail();
-	}
-
 	public function configureCrud(Crud $crud): Crud
 	{
 		return $crud
@@ -36,12 +31,12 @@ class CommentCrudController extends AbstractCrudController
 
 	public function configureFilters(Filters $filters): Filters
 	{
-		return $filters->add(EntityFilter::new('Conference'));
+		return $filters->add(EntityFilter::new('conference'));
 	}
 
 	public function configureFields(string $pageName): iterable
 	{
-		yield AssociationField::new('Conference');
+		yield AssociationField::new('conference');
 		yield TextField::new('author');
 		yield EmailField::new('email');
 		yield TextareaField::new('text')
