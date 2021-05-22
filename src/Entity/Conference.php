@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Conference
 {
+
+	public function __toString(): string
+	{
+		return $this->city . '' . $this->year;
+	}
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

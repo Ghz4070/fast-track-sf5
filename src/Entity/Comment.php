@@ -10,118 +10,124 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Comment
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
+	public function __toString(): string
+	{
+		return (string)$this->getEmail();
+	}
 
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $text;
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $email;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $author;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
+	/**
+	 * @ORM\Column(type="text")
+	 */
+	private $text;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $conference;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $email;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $photoFilename;
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $createdAt;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	/**
+	 * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
+	private $conference;
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
+	/**
+	 * @ORM\Column(type="string", length=255, nullable=true)
+	 */
+	private $photoFilename;
 
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-        return $this;
-    }
+	public function getAuthor(): ?string
+	{
+		return $this->author;
+	}
 
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
+	public function setAuthor(string $author): self
+	{
+		$this->author = $author;
 
-    public function setText(string $text): self
-    {
-        $this->text = $text;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getText(): ?string
+	{
+		return $this->text;
+	}
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
+	public function setText(string $text): self
+	{
+		$this->text = $text;
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getEmail(): ?string
+	{
+		return $this->email;
+	}
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
+	public function setEmail(string $email): self
+	{
+		$this->email = $email;
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getCreatedAt(): ?\DateTimeInterface
+	{
+		return $this->createdAt;
+	}
 
-    public function getConference(): ?Conference
-    {
-        return $this->conference;
-    }
+	public function setCreatedAt(\DateTimeInterface $createdAt): self
+	{
+		$this->createdAt = $createdAt;
 
-    public function setConference(?Conference $conference): self
-    {
-        $this->conference = $conference;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getConference(): ?Conference
+	{
+		return $this->conference;
+	}
 
-    public function getPhotoFilename(): ?string
-    {
-        return $this->photoFilename;
-    }
+	public function setConference(?Conference $conference): self
+	{
+		$this->conference = $conference;
 
-    public function setPhotoFilename(?string $photoFilename): self
-    {
-        $this->photoFilename = $photoFilename;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getPhotoFilename(): ?string
+	{
+		return $this->photoFilename;
+	}
+
+	public function setPhotoFilename(?string $photoFilename): self
+	{
+		$this->photoFilename = $photoFilename;
+
+		return $this;
+	}
 }
