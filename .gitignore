@@ -12,3 +12,4 @@
 ### Custom ignore
 
 /docker/sql/
+.DS_Store
