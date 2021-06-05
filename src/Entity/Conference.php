@@ -136,14 +136,6 @@ class Conference
 		return $this;
 	}
 
-	/**
-	 * @ORM\PrePersist
-	 */
-	public function setCreatedAtValue()
-	{
-		$this->createdAt = new \DateTime();
-	}
-
 	public function getSlug(): ?string
 	{
 		return $this->slug;
