@@ -6,9 +6,12 @@ use App\Repository\ConferenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ConferenceRepository::class)
+ * @UniqueEntity("slug")
  */
 class Conference
 {
@@ -18,106 +21,138 @@ class Conference
 		return $this->city . '' . $this->year;
 	}
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $city;
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $city;
 
-    /**
-     * @ORM\Column(type="string", length=4)
-     */
-    private $year;
+	/**
+	 * @ORM\Column(type="string", length=4)
+	 */
+	private $year;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isInternational;
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private $isInternational;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="conference", orphanRemoval=true)
-     */
-    private $comments;
+	/**
+	 * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="conference", orphanRemoval=true)
+	 */
+	private $comments;
 
-    public function __construct()
-    {
-        $this->comments = new ArrayCollection();
-    }
+	/**
+	 * @ORM\Column(type="string", length=255, unique=true)
+	 */
+	private $slug;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+	public function __construct()
+	{
+		$this->comments = new ArrayCollection();
+	}
 
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
+	public function computeSlug(SluggerInterface $slugger)
+	{
+		if (!$this->slug || $this->slug) {
+			$this->slug = (string)$slugger->slug((string)$this)->lower();
+		}
+	}
 
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
+	public function getId(): ?int
+	{
+		return $this->id;
+	}
 
-        return $this;
-    }
+	public function getCity(): ?string
+	{
+		return $this->city;
+	}
 
-    public function getYear(): ?string
-    {
-        return $this->year;
-    }
+	public function setCity(string $city): self
+	{
+		$this->city = $city;
 
-    public function setYear(string $year): self
-    {
-        $this->year = $year;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getYear(): ?string
+	{
+		return $this->year;
+	}
 
-    public function getIsInternational(): ?bool
-    {
-        return $this->isInternational;
-    }
+	public function setYear(string $year): self
+	{
+		$this->year = $year;
 
-    public function setIsInternational(bool $isInternational): self
-    {
-        $this->isInternational = $isInternational;
+		return $this;
+	}
 
-        return $this;
-    }
+	public function getIsInternational(): ?bool
+	{
+		return $this->isInternational;
+	}
 
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
+	public function setIsInternational(bool $isInternational): self
+	{
+		$this->isInternational = $isInternational;
 
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setConference($this);
-        }
+		return $this;
+	}
 
-        return $this;
-    }
+	/**
+	 * @return Collection|Comment[]
+	 */
+	public function getComments(): Collection
+	{
+		return $this->comments;
+	}
 
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getConference() === $this) {
-                $comment->setConference(null);
-            }
-        }
+	public function addComment(Comment $comment): self
+	{
+		if (!$this->comments->contains($comment)) {
+			$this->comments[] = $comment;
+			$comment->setConference($this);
+		}
 
-        return $this;
-    }
+		return $this;
+	}
+
+	public function removeComment(Comment $comment): self
+	{
+		if ($this->comments->removeElement($comment)) {
+			// set the owning side to null (unless already changed)
+			if ($comment->getConference() === $this) {
+				$comment->setConference(NULL);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function setCreatedAtValue()
+	{
+		$this->createdAt = new \DateTime();
+	}
+
+	public function getSlug(): ?string
+	{
+		return $this->slug;
+	}
+
+	public function setSlug(string $slug): self
+	{
+		$this->slug = $slug;
+
+		return $this;
+	}
 }
