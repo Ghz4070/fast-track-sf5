@@ -45,6 +45,20 @@ services:
     volumes:
       - ./docker/sql/data:/var/lib/postgresql/data
 
+  database_test:
+    image: postgres:13-alpine
+    networks:
+      - network_nginx
+    restart: on-failure
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_USER=main
+      - POSTGRES_PASSWORD=main
+      - POSTGRES_DB=main_test
+    volumes:
+      - ./docker/sql/data_test:/var/lib/postgresql/data
+
   composer:
     image: composer:2
     networks:
